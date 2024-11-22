@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: nut-upsd
+  IMAGE_NAME: tigattack/nut-upsd
   PLATFORMS: linux/amd64, linux/arm64
 
 jobs:
