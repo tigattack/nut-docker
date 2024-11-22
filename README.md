@@ -9,6 +9,9 @@ The drawback of this implementation is that the container can't be easily driven
 
 So instead, traditional config files have to be slipped into the container by use of a config volume mount.
 
+> [!NOTE]
+> This repository builds on the great work of [Gianpaolo Del Matto](https://github.com/gpdm). Thank you.
+
 ## How to Use
 
 Pull as usual:
