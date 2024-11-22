@@ -5,10 +5,9 @@
 
 [admin]
   password = admin
-  actions = SET 
+  actions = SET
   instcmds = ALL
-
 
 [monitor]
   password = monitor
-  upsmon master
+  upsmon primary
