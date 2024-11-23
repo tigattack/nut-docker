@@ -83,16 +83,11 @@ First, identify the `device-id`, i.e. by running `lsusb`:
 $ lsusb
 Bus 007 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 008 Device 002: ID 0bc2:331a Seagate RSS LLC
 Bus 008 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 006 Device 002: ID 0665:5161 Cypress Semiconductor USB to serial                    # << generic UPS on USB
+Bus 006 Device 002: ID 0665:5161 Cypress Semiconductor USB to serial # << generic UPS on USB
 Bus 006 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
 Bus 005 Device 002: ID 051d:0002 American Power Conversion Uninterruptible Power Supply # << APC UPS on USB
 Bus 005 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 002 Device 002: ID f400:f400
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 ```
 
 The example above reveals two UPS's attached, one to Bus 5, as device #2, the other on Bus 6, as device #2.
