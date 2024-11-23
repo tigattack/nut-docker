@@ -3,7 +3,7 @@ FROM alpine:3.20
 # renovate: datasource=repology depName=alpine_3_20/nut versioning=loose
 ENV NUT_VERSION="2.8.2-r0"
 
-RUN apk add --no-cache nut="${NUT_VERSION}" && \
+RUN apk add --no-cache nut="${NUT_VERSION}" libusb && \
     [ -d /etc/nut ] && find /etc/nut/ -type f -exec mv {} {}.sample \; || false
 
 COPY entrypoint.sh /entrypoint.sh
