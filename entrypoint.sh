@@ -56,10 +56,23 @@ for cfgFile in ${nutCfgFiles}; do
 	exit
 done
 
-# initialize UPS driver
-printf "Starting up the UPS drivers ...\n"
+# Clear stale PID files
+for i in `find /var/run/nut/ -type f -name '*.pid'`; do
+	echo "Clearing stale PID from $i"
+	pid=`cat $i`
+	if [ -d /proc/$pid ]; then
+		echo "Found PID $pid still running. Killing it before starting."
+		kill $pid
+		while ps -p $pid; do echo "Waiting for PID $pid to die"; sleep 1; done
+		echo "Killed PID $pid"
+	fi
+	rm -f $i
+done
+
+# Initialise UPS driver
+printf "Starting UPS drivers ...\n"
 /usr/sbin/upsdrvctl start || { printf "ERROR on driver startup.\n"; exit; }
 
-# run the ups daemon
-printf "Starting up the UPS daemon ...\n"
+# Run the ups daemon
+printf "Starting UPS daemon ...\n"
 exec /usr/sbin/upsd -D $* || { printf "ERROR on daemon startup.\n"; exit; }
