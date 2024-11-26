@@ -1,4 +1,4 @@
-Network UPS Tools 2.8.2
+# Network UPS Tools 2.8.2
 # This file is generated and installed by the Network UPS Tools package.
 
 ACTION=="remove", GOTO="nut-usbups_rules_end"
