@@ -13,6 +13,7 @@ jobs:
     env:
       IMAGE_NAME: nut-upsd:latest
       RULES_FILE: example_confs/etc/udev/rules.d/62-nut-usbups.rules
+      NUT_GID: 101
     steps:
       - uses: actions/checkout@v4
 
@@ -23,6 +24,7 @@ jobs:
       - name: Dump udev rules
         run: |
           docker run --rm $IMAGE_NAME dump-udev-rules > $RULES_FILE
+          sed -i "s/GROUP=\"nut\"/GROUP=\"$NUT_GID\"/g" $RULES_FILE
           echo "# RULES FILE START"
           cat $RULES_FILE
           echo "# RULES FILE END"
