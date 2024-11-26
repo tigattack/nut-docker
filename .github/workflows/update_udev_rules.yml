@@ -3,6 +3,7 @@ name: Update udev rules file
 on:
   push:
     paths: [Dockerfile]
+  workflow_dispatch:
 
 jobs:
   dump_udev:
