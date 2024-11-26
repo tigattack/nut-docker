@@ -42,7 +42,7 @@ jobs:
             git commit -m "Update NUT udev rules"
             git push
 
-            echo "# NUT udev rules have been updated.\n\nSee [${RULES_FILE##*/}](https://github.com/${GITHUB_REPOSITORY}/blob/main/${RULES_FILE})" >> $GITHUB_STEP_SUMMARY
+            echo -e "# NUT udev rules have been updated.\n\nSee [${RULES_FILE##*/}](https://github.com/${GITHUB_REPOSITORY}/blob/main/${RULES_FILE})" >> $GITHUB_STEP_SUMMARY
           else
             echo -e "# NUT udev rules are already up to date.\n\nSee [${RULES_FILE##*/}](https://github.com/${GITHUB_REPOSITORY}/blob/main/${RULES_FILE})" >> $GITHUB_STEP_SUMMARY
           fi
