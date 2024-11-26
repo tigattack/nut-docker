@@ -27,11 +27,17 @@ Then run it as follows:
 ```sh
 docker run -d \
    -p 3493:3493 \
-   -v /path/to/nut-config:/etc/nut \
+   -v /path/to/nut-config:/etc/nut:ro \
+   [ -e NUT_UID=... ] \
+   [ -e NUT_GID=... ] \
    [ --privileged | --device ... ] \
    ghcr.io/tigattack/nut-upsd[:<tag>]
 ```
 
+### Environment Variables
+
+* `NUT_UID`: NUT user ID. NUT drops privileges to this user after starting as described in [upsd(8)](https://networkupstools.org/docs/man/upsd.html). While this env var has no default, the default NUT user ID is `100` in this image.
+* `NUT_GID`: NUT group ID. While this env var has no default, the default NUT group ID is `101` in this image.
 
 ## Configuration
 
@@ -46,17 +52,21 @@ As this image runs only the UPS drivers and the upsd daemon itself, you only nee
 This Docker image cannot be configured through environment variables. You have to use a config volume as shown:
 
 1. Create the *ups.conf*, *upsd.conf* and *upsd.users* config files with your favourite editor
-2. Store them into a permanent config directory, e.g. `/data/dockers/nut-upsd/config`
-3. Apply proper file permissions and ownership
- ```sh
-  cd /data/dockers/nut-upsd/config
-  chmod 0440 ups.conf upsd.conf upsd.users
-  chown 100:101 ups.conf upsd.conf upsd.users
- ```
+2. Store them into a permanent config directory, e.g. `/opt/nut-upsd`
+3. Apply proper file permissions and ownership.  
+   `<UID>` should be the value you gave to the `NUT_UID` env var, or `100` if unspecified.  
+   `<GID>` should be the value you gave to the `NUT_GID` env var, or `101` if unspecified.
+   ```sh
+   cd /opt/nut-upsd
+   chmod 0640 ups.conf upsd.conf upsd.users
+   chown <UID>:<GID> ups.conf upsd.conf upsd.users
+   # Example: chown 100:101 ups.conf upsd.conf upsd.users
+   ```
 4. When running the container, point it mount the config directory as a volume, e.g.
-   `-v /data/dockers/nut-upsd/config:/etc/nut`
+   `-v /opt/nut-upsd:/etc/nut:ro`
 
-**The container will fail to start when no volume is mounted, or not all needed files are present!**
+> [!TIP]
+> The container will fail to start when no volume is mounted, or not all needed files are present!
 
 Some sample config files are provided for your conventience in the [example_confs/etc/nut](example_confs/etc/nut) directory. You may use them as a starting point, however I recommend having an in-depth look at the official [Network UPS Tools](https://networkupstools.org/) documentation.
 
