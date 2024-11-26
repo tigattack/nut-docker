@@ -70,7 +70,7 @@ This Docker image cannot be configured through environment variables. You have t
 
 Some sample config files are provided for your conventience in the [example_confs/etc/nut](example_confs/etc/nut) directory. You may use them as a starting point, however I recommend having an in-depth look at the official [Network UPS Tools](https://networkupstools.org/) documentation.
 
-While the method described below is preferred, you can find example udev rules for USB UPS's in [example_confs/etc/udev/rules.d/62-nut-usbups.rules](https://github.com/tigattack/nut-docker/blob/main/example_confs/etc/udev/rules.d/62-nut-usbups.rules).
+You can find example udev rules for USB UPS's in [example_confs/etc/udev/rules.d/62-nut-usbups.rules](example_confs/etc/udev/rules.d/62-nut-usbups.rules).
 
 ## Device Mapping
 
@@ -129,4 +129,4 @@ docker run [ ... ] \
   [ ... ]
 ```
 
-Alternatively, you can also use udev rules (see example config [example_confs/etc/udev/rules.d/62-nut-usbups.rules](https://github.com/tigattack/nut-docker/blob/main/example_confs/etc/udev/rules.d/62-nut-usbups.rules)), but the cgroup rule method is preferred.
+If you see "access denied" or "insufficient permissions" errors and your container's cgroup rules are correct, you may need to configure udev rules on your host (see example: [example_confs/etc/udev/rules.d/62-nut-usbups.rules](example_confs/etc/udev/rules.d/62-nut-usbups.rules)).
