@@ -26,6 +26,12 @@
 #  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+# Hack to print udev rules
+if [ "$1" = "dump-udev-rules" ]; then
+    cat /lib/udev/rules.d/62-nut-usbups.rules
+    exit 0
+fi
+
 nutCfgVolume="/etc/nut"
 nutCfgFiles="ups.conf upsd.conf upsd.users"
 nutUser="nut"

@@ -70,9 +70,11 @@ This Docker image cannot be configured through environment variables. You have t
 
 Some sample config files are provided for your conventience in the [example_confs/etc/nut](example_confs/etc/nut) directory. You may use them as a starting point, however I recommend having an in-depth look at the official [Network UPS Tools](https://networkupstools.org/) documentation.
 
+While the method described below is preferred, you can find example udev rules for USB UPS's in [example_confs/etc/udev/rules.d/62-nut-usbups.rules](https://github.com/tigattack/nut-docker/blob/main/example_confs/etc/udev/rules.d/62-nut-usbups.rules).
+
 ## Device Mapping
 
-In order for the UPS monitoring to work, you have to map your device tree into the docker container.
+In order for the UPS monitoring to work, you have to map your device tree into the Docker container.
 
 ### Privileged Mode
 
@@ -85,7 +87,7 @@ Just pass this option to the container at startup: `--privileged`
 
 A batter choice than privileged mode is to pass just the individual devices into the container.
 
-This can be done by passing `--device` and `--device-cgroup-rule` commands to docker.
+This can be done by passing `--device` and `--device-cgroup-rule` commands to Docker.
 
 First, identify the `device-id`, i.e. by running `lsusb`:
 
@@ -126,3 +128,5 @@ docker run [ ... ] \
   --device /dev/bus/usb/006/002 --device-cgroup-rule='c 189:641 rw'
   [ ... ]
 ```
+
+Alternatively, you can also use udev rules (see example config [example_confs/etc/udev/rules.d/62-nut-usbups.rules](https://github.com/tigattack/nut-docker/blob/main/example_confs/etc/udev/rules.d/62-nut-usbups.rules)), but the cgroup rule method is preferred.
