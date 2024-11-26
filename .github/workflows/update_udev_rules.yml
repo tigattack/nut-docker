@@ -9,21 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      IMAGE_NAME: nut-upsd:latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Build image
-        uses: docker/build-push-action@v6
-        with:
-          tags: nut-upsd:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          provenance: false
+        id: build
+        run: |
+          docker build -t $IMAGE_NAME .
 
       - name: Dump udev rules
         id: dump_rules
         run: |
-          docker run --rm nut-upsd:latest dump-udev-rules > rules
+          docker run --rm $IMAGE_NAME dump-udev-rules > rules
           # Assert that the rules file is not empty
           if [ ! -s rules ]; then
             # ::error file={name},line={line},endLine={endLine},title={title}::{message}
