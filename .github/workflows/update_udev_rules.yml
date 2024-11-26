@@ -2,6 +2,7 @@ name: Update udev rules file
 
 on:
   push:
+    branches: ['main']
     paths: [Dockerfile]
   workflow_dispatch:
 
