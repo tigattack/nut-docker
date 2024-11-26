@@ -28,6 +28,7 @@
 
 # Hack to print udev rules
 if [ "$1" = "dump-udev-rules" ]; then
+    upsd -V | sed 's/upsd //'
     cat /lib/udev/rules.d/62-nut-usbups.rules
     exit 0
 fi
