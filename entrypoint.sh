@@ -50,6 +50,8 @@ if [ -n "$NUT_UID" ] && [ -n "$NUT_GID" ]; then
         echo "Updating GID of group '$nutUser' from $nutGid to $NUT_GID"
         groupmod -g "$NUT_GID" $nutUser || { echo "ERROR: Failed to modify group ID"; exit 1; }
         nutGid=$NUT_GID
+    else
+        echo "GID of group '$nutUser' already set to $NUT_GID."
     fi
 
     # Update the nut user ID
@@ -57,6 +59,8 @@ if [ -n "$NUT_UID" ] && [ -n "$NUT_GID" ]; then
         echo "Updating UID of user '$nutUser' from $nutUid to $NUT_UID"
         usermod -u "$NUT_UID" -g "$NUT_GID" $nutUser || { echo "ERROR: Failed to modify user ID"; exit 1; }
         nutUid=$NUT_UID
+    else
+        echo "UID of user '$nutUser' already set to $NUT_UID."
     fi
 
     # Fix ownership of files and directories associated with the updated user/group
