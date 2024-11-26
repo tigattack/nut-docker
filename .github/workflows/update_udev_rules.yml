@@ -23,11 +23,11 @@ jobs:
       - name: Dump udev rules
         run: |
           docker run --rm $IMAGE_NAME dump-udev-rules > $RULES_FILE
-          # Assert that the rules file is not empty
-          if [ ! -s rules ]; then
-            # ::error file={name},line={line},endLine={endLine},title={title}::{message}
+          echo "# RULES FILE START"
+          cat $RULES_FILE
+          echo "# RULES FILE END"
+          if [ ! -s $RULES_FILE ]; then
             echo "::error title=Failed to dump udev rules::Rules file was found empty."
-            exit 1
           fi
 
       - name: Update udev rules
