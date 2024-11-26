@@ -12,33 +12,27 @@ jobs:
       contents: write
     env:
       IMAGE_NAME: nut-upsd:latest
+      RULES_FILE: example_confs/etc/udev/rules.d/62-nut-usbups.rules
     steps:
       - uses: actions/checkout@v4
 
       - name: Build image
-        id: build
         run: |
           docker build -t $IMAGE_NAME .
 
       - name: Dump udev rules
-        id: dump_rules
         run: |
-          docker run --rm $IMAGE_NAME dump-udev-rules > rules
+          docker run --rm $IMAGE_NAME dump-udev-rules > $RULES_FILE
           # Assert that the rules file is not empty
           if [ ! -s rules ]; then
             # ::error file={name},line={line},endLine={endLine},title={title}::{message}
             echo "::error title=Failed to dump udev rules::Rules file was found empty."
             exit 1
           fi
-          echo "rules=$(cat rules)" >> $GITHUB_OUTPUT
 
       - name: Update udev rules
-        env:
-          RULES_FILE: example_confs/etc/udev/rules.d/62-nut-usbups.rules
+      # Yoinked from my slightly cursed workflow here: https://github.com/rHomelab/Red-DiscordBot-Docker/blob/main/.github/workflows/redbot-args-update.yml.
         run: |
-          echo "${{ steps.dump_rules.outputs.rules }}" > "$RULES_FILE"
-
-          # Yoinked from my slightly cursed workflow here: https://github.com/rHomelab/Red-DiscordBot-Docker/blob/main/.github/workflows/redbot-args-update.yml.
           if git status | grep -q 'Changes not staged for commit' ; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
