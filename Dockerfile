@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.21
 
 # renovate: datasource=repology depName=alpine_3_20/nut versioning=loose
 ENV NUT_VERSION="2.8.2-r0"
