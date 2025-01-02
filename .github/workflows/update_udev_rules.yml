@@ -25,6 +25,9 @@ jobs:
       - name: Dump udev rules
         run: |
           docker run --rm $IMAGE_NAME dump-udev-rules > $RULES_FILE
+          if [ $? -ne 0 ]; then
+            echo "::error title=Failed to dump udev rules::An error occured while dumping udev rules from the container."
+          fi
           sed -i "s/GROUP=\"nut\"/GROUP=\"$NUT_GID\"/g" $RULES_FILE
           echo "# RULES FILE START"
           cat $RULES_FILE
