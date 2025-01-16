@@ -85,7 +85,7 @@ Just pass this option to the container at startup: `--privileged`
 
 ### Device Mode
 
-A batter choice than privileged mode is to pass just the individual devices into the container.
+A better choice than privileged mode is to pass just the individual devices into the container.
 
 This can be done by passing `--device` and `--device-cgroup-rule` commands to Docker.
 
@@ -102,7 +102,7 @@ Bus 005 Device 002: ID 051d:0002 American Power Conversion Uninterruptible Power
 Bus 005 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
 ```
 
-The example above reveals two UPS's attached, one to Bus 5, as device #2, the other on Bus 6, as device #2.
+The example above reveals two UPS's attached, one to Bus 6, as device #2, the other on Bus 5, as device #2.
 This translates to the following device paths:
 
 ```
