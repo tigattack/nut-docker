@@ -131,7 +131,7 @@ docker run [ ... ] \
 
 If you see "access denied" or "insufficient permissions" errors and your container's cgroup rules are correct, you may need to configure udev rules on your host (see example: [example_confs/etc/udev/rules.d/62-nut-usbups.rules](example_confs/etc/udev/rules.d/62-nut-usbups.rules)).
 
-### Persistent Device
+### Persistent Device Name
 
 When restarting or reconnecting the UPS over USB, the bus ID can change. This renders the device mapping into the container useless as it will be mapping a non-existent or other device into your container.
 
