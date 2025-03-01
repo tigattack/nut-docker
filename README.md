@@ -164,3 +164,26 @@ We can then check if this is working with `ls -l /dev/ups`
 $ ls -l /dev/ups
 lrwxrwxrwx 1 root root 15 Feb 27 21:39 /dev/ups -> bus/usb/001/006
 ```
+
+### Handling Device Reconnection
+
+When the USB device is replugged, the container will in some cases not rebind the device.
+
+This can be fixed by restarting the container, however we would preferably want to automate this process, so we don't have to connect to the machine to restart NUT.
+
+To automate this, we can append a `RUN` parameter to our udev rule. The `RUN` parameter will run a command when the device is connected. This is recommended to be used in conjunction with the persistent device symlink as above:
+
+```sh
+$ cat /etc/udev/rules.d/62-nut-usbups.rules 
+ACTION=="remove", GOTO="nut-usbups_rules_end"
+SUBSYSTEM=="usb_device", GOTO="nut-usbups_rules_real"
+SUBSYSTEM=="usb", GOTO="nut-usbups_rules_real"
+GOTO="nut-usbups_rules_end"
+
+LABEL="nut-usbups_rules_real"
+ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLINK+="ups", RUN+="/bin/bash /home/user/nut/run.sh"
+
+LABEL="nut-usbups_rules_end"
+```
+
+In this example, this will run `/bin/bash /home/user/nut/run.sh`, which contains the commands to stop, remove, and run the container.
