@@ -130,3 +130,24 @@ docker run [ ... ] \
 ```
 
 If you see "access denied" or "insufficient permissions" errors and your container's cgroup rules are correct, you may need to configure udev rules on your host (see example: [example_confs/etc/udev/rules.d/62-nut-usbups.rules](example_confs/etc/udev/rules.d/62-nut-usbups.rules)).
+
+### Persistent Device
+
+When restarting or reconnecting the UPS over USB, the bus ID can change. This renders the device mapping into the container useless as it will be mapping a non-existent or other device into your container.
+
+To fix this, we need to set a udev rule to symlink the device to another name. We will set this in `/etc/udev/rules.d/62-nut-usbups.rules` that we created on setup, and will use our vendor and product attributes for our UPS.
+
+This example is using a Eaton UPS with a vendor ID of `0463` and product ID of `ffff`, and I am mapping this to group `1000`, with a symlink set to `ups` which will result in our device being symlinked to `/dev/ups`.
+
+```sh
+$ cat /etc/udev/rules.d/62-nut-usbups.rules
+ACTION=="remove", GOTO="nut-usbups_rules_end"
+SUBSYSTEM=="usb_device", GOTO="nut-usbups_rules_real"
+SUBSYSTEM=="usb", GOTO="nut-usbups_rules_real"
+GOTO="nut-usbups_rules_end"
+
+LABEL="nut-usbups_rules_real"
+ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLINK+="ups"
+
+LABEL="nut-usbups_rules_end"
+```
