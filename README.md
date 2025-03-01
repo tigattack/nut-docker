@@ -151,3 +151,16 @@ ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLI
 
 LABEL="nut-usbups_rules_end"
 ```
+
+Next, either run the following two commands to reload and trigger the udev rules (or restart the device):
+
+```sh
+$ sudo udevadm control -R && sudo udevadm trigger
+```
+
+We can then check if this is working with `ls -l /dev/ups`
+
+```sh
+$ ls -l /dev/ups
+lrwxrwxrwx 1 root root 15 Feb 27 21:39 /dev/ups -> bus/usb/001/006
+```
