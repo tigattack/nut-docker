@@ -13,7 +13,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: tigattack/nut-upsd
-  PLATFORMS: linux/amd64, linux/arm64
+  PLATFORMS: linux/amd64, linux/arm64, linux/arm/v6
 
 jobs:
   build:
