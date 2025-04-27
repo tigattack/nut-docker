@@ -152,17 +152,22 @@ ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLI
 LABEL="nut-usbups_rules_end"
 ```
 
-Next, either run the following two commands to reload and trigger the udev rules (or restart the device):
+Next, either run the following two commands to reload and trigger the udev rules (or restart the device) and check if it's working:
 
 ```sh
 $ sudo udevadm control -R && sudo udevadm trigger
-```
-
-We can then check if this is working with `ls -l /dev/ups`
-
-```sh
 $ ls -l /dev/ups
 lrwxrwxrwx 1 root root 15 Feb 27 21:39 /dev/ups -> bus/usb/001/006
+```
+
+In addition to these steps, we will need to read the link for /dev/ups when starting our container.
+This can be done by using the "readlink" command:
+
+```sh
+$ docker run -d \
+...
+   --device $(readlink -f /dev/ups) \
+...
 ```
 
 ### Handling Device Reconnection
