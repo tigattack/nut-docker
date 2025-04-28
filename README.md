@@ -130,3 +130,75 @@ docker run [ ... ] \
 ```
 
 If you see "access denied" or "insufficient permissions" errors and your container's cgroup rules are correct, you may need to configure udev rules on your host (see example: [example_confs/etc/udev/rules.d/62-nut-usbups.rules](example_confs/etc/udev/rules.d/62-nut-usbups.rules)).
+
+### Persistent Device Name
+
+When restarting or reconnecting the UPS over USB, the bus ID can change. This renders the device mapping into the container useless as it will be mapping a non-existent or other device into your container.
+
+To fix this, we need to set a udev rule to symlink the device to another name. We will set this in `/etc/udev/rules.d/62-nut-usbups.rules` that we created on setup, and will use our vendor and product attributes for our UPS.
+
+This example is using a Eaton UPS with a vendor ID of `0463` and product ID of `ffff`, and I am mapping this to group `1000`, with a symlink set to `ups` which will result in our device being symlinked to `/dev/ups`.
+
+```sh
+$ cat /etc/udev/rules.d/62-nut-usbups.rules
+ACTION=="remove", GOTO="nut-usbups_rules_end"
+SUBSYSTEM=="usb_device", GOTO="nut-usbups_rules_real"
+SUBSYSTEM=="usb", GOTO="nut-usbups_rules_real"
+GOTO="nut-usbups_rules_end"
+
+LABEL="nut-usbups_rules_real"
+ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLINK+="ups"
+
+LABEL="nut-usbups_rules_end"
+```
+
+Next, reload and trigger the udev rules by either running the first command below or restart the device, then check if it's working:
+
+```sh
+$ sudo udevadm control -R && sudo udevadm trigger
+$ ls -l /dev/ups
+lrwxrwxrwx 1 root root 15 Feb 27 21:39 /dev/ups -> bus/usb/001/006
+```
+
+In addition to these steps, we will need to read the link for `/dev/ups` when starting our container.
+This can be done by using the "readlink" command:
+
+```sh
+$ docker run -d \
+...
+   --device $(readlink -f /dev/ups) \
+...
+```
+
+### Handling Device Reconnection
+
+When the USB device is replugged, the container will in some cases not rebind the device.
+
+This can be fixed by restarting the container, however we would preferably want to automate this process, so we don't have to connect to the machine to restart NUT.
+
+To automate this, we can append a `RUN` parameter to our udev rule. The `RUN` parameter will run a command when the device is connected. This is recommended to be used in conjunction with the persistent device symlink as above:
+
+```sh
+$ cat /etc/udev/rules.d/62-nut-usbups.rules 
+ACTION=="remove", GOTO="nut-usbups_rules_end"
+SUBSYSTEM=="usb_device", GOTO="nut-usbups_rules_real"
+SUBSYSTEM=="usb", GOTO="nut-usbups_rules_real"
+GOTO="nut-usbups_rules_end"
+
+LABEL="nut-usbups_rules_real"
+ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLINK+="ups", RUN+="/bin/bash /home/user/nut/run.sh"
+
+LABEL="nut-usbups_rules_end"
+```
+
+In this example, this will run `/bin/bash /home/user/nut/run.sh`, which contains the commands to stop, remove, and run the container. For example:
+
+```shell
+#!/usr/bin/env bash
+
+docker stop nut
+docker rm nut
+docker run -d \
+  ...
+  --device $(readlink -f /dev/ups) \
+  ...
