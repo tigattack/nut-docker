@@ -152,7 +152,7 @@ ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLI
 LABEL="nut-usbups_rules_end"
 ```
 
-Next, either run the following two commands to reload and trigger the udev rules (or restart the device) and check if it's working:
+Next, reload and trigger the udev rules by either running the first command below or restart the device, then check if it's working:
 
 ```sh
 $ sudo udevadm control -R && sudo udevadm trigger
@@ -160,7 +160,7 @@ $ ls -l /dev/ups
 lrwxrwxrwx 1 root root 15 Feb 27 21:39 /dev/ups -> bus/usb/001/006
 ```
 
-In addition to these steps, we will need to read the link for /dev/ups when starting our container.
+In addition to these steps, we will need to read the link for `/dev/ups` when starting our container.
 This can be done by using the "readlink" command:
 
 ```sh
@@ -191,4 +191,14 @@ ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="664", GROUP="1000", SYMLI
 LABEL="nut-usbups_rules_end"
 ```
 
-In this example, this will run `/bin/bash /home/user/nut/run.sh`, which contains the commands to stop, remove, and run the container.
+In this example, this will run `/bin/bash /home/user/nut/run.sh`, which contains the commands to stop, remove, and run the container. For example:
+
+```shell
+#!/usr/bin/env bash
+
+docker stop nut
+docker rm nut
+docker run -d \
+  ...
+  --device $(readlink -f /dev/ups) \
+  ...
