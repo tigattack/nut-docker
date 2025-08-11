@@ -16,7 +16,7 @@ jobs:
       RULES_FILE: example_confs/etc/udev/rules.d/62-nut-usbups.rules
       NUT_GID: 101
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build image
         run: |
