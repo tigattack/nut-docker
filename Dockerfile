@@ -1,7 +1,7 @@
 FROM alpine:3.23
 
-# renovate: datasource=repology depName=alpine_3_22/nut versioning=loose
-ENV NUT_VERSION="2.8.2-r2"
+# renovate: datasource=repology depName=alpine_3_23/nut versioning=loose
+ENV NUT_VERSION="2.8.3-r3"
 
 RUN apk add --no-cache nut="${NUT_VERSION}" shadow && \
     [ -d /etc/nut ] && find /etc/nut/ -type f -exec mv {} {}.sample \; || false && \
