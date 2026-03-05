@@ -1,4 +1,4 @@
-# Network UPS Tools 2.8.2
+# Network UPS Tools 2.8.3 release
 # This file is generated and installed by the Network UPS Tools package.
 
 ACTION=="remove", GOTO="nut-usbups_rules_end"
@@ -149,7 +149,7 @@ ATTR{idVendor}=="075d", ATTR{idProduct}=="0300", MODE="664", GROUP="101"
 ATTR{idVendor}=="0764", ATTR{idProduct}=="0005", MODE="664", GROUP="101"
 #  Dynex DX-800U?, CP1200AVR/BC1200D, CP825AVR-G, CP1000AVRLCD, CP1000PFCLCD, CP1500C, CP550HG, etc.  - usbhid-ups
 ATTR{idVendor}=="0764", ATTR{idProduct}=="0501", MODE="664", GROUP="101"
-#  OR2200LCDRM2U, OR700LCDRM1U, PR6000LCDRTXL5U  - usbhid-ups
+#  OR2200LCDRM2U, OR700LCDRM1U, PR6000LCDRTXL5U, CP1350EPFCLCD  - usbhid-ups
 ATTR{idVendor}=="0764", ATTR{idProduct}=="0601", MODE="664", GROUP="101"
 #  Sweex 1000VA  - nutdrv_qx richcomm_usb
 ATTR{idVendor}=="0925", ATTR{idProduct}=="1234", MODE="664", GROUP="101"
@@ -223,6 +223,10 @@ ATTR{idVendor}=="09ae", ATTR{idProduct}=="4006", MODE="664", GROUP="101"
 ATTR{idVendor}=="09ae", ATTR{idProduct}=="4007", MODE="664", GROUP="101"
 #  e.g. ?  - usbhid-ups
 ATTR{idVendor}=="09ae", ATTR{idProduct}=="4008", MODE="664", GROUP="101"
+
+# KSTAR under Berkeley Varitronics Systems ID
+#  6000 VA LCD 4U Rack UPS; 5396-1Kx  - usbhid-ups
+ATTR{idVendor}=="09d6", ATTR{idProduct}=="0001", MODE="664", GROUP="101"
 
 # PowerCOM
 #  PowerCOM Vanguard and BNT-xxxAP  - usbhid-ups
@@ -303,6 +307,10 @@ ATTR{idVendor}=="2e66", ATTR{idProduct}=="0203", MODE="664", GROUP="101"
 ATTR{idVendor}=="2e66", ATTR{idProduct}=="0300", MODE="664", GROUP="101"
 #  https://www.salicru.com/sps-850-adv-t.html  - usbhid-ups
 ATTR{idVendor}=="2e66", ATTR{idProduct}=="0302", MODE="664", GROUP="101"
+
+# EcoFlow
+#  EcoFlow  - usbhid-ups
+ATTR{idVendor}=="3746", ATTR{idProduct}=="ffff", MODE="664", GROUP="101"
 
 # Powervar
 #  Powervar  - usbhid-ups
